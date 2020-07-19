@@ -1,0 +1,7 @@
+.code
+.vscode
+.env
+
+.code/
+.vscode/
+simple-chat
