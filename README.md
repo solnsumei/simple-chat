@@ -1,4 +1,4 @@
-#Simple Chat
+# Simple Chat
 
 Go Realtime messaging app server
 
