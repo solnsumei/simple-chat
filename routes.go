@@ -3,13 +3,26 @@ package main
 import (
 	"net/http"
 
+	"github.com/solnsumei/simple-chat/middlewares"
+
 	"github.com/gin-gonic/gin"
+	"github.com/solnsumei/simple-chat/controllers"
 )
 
-func loadRoutes(router *gin.Engine) {
-	apiRouter := router.Group("/api/v1")
+func loadGuestRoutes(router *gin.Engine) {
+	guestRouter := router.Group("/api/v1")
 
-	apiRouter.GET("/", func(ctx *gin.Context) {
+	guestRouter.POST("/login", controllers.LoginUser)
+	guestRouter.POST("/signup", controllers.RegisterUser)
+
+	guestRouter.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"message": "Welcome to simple chat api"})
 	})
+}
+
+func loadAuthRoutes(router *gin.Engine) {
+	authRouter := router.Group("/api/v1")
+	authRouter.Use(middlewares.AuthMiddleware())
+
+	authRouter.GET("/users", controllers.FetchAllUsers)
 }

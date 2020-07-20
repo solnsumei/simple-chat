@@ -4,7 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/solnsumei/simple-chat/config"
+	"github.com/solnsumei/simple-chat/models"
+	"github.com/solnsumei/simple-chat/utils"
 )
 
 func init() {
@@ -12,19 +13,24 @@ func init() {
 }
 
 func main() {
-	config, err := config.LoadConfigVars()
+	config, err := utils.LoadConfigVars()
 
 	if err != nil {
 		panic("Please set .env config variables.")
 	}
 
+	if err := models.ConnectDatabase(config); err != nil {
+		panic(err)
+	}
+
 	router := gin.Default()
 
-	loadRoutes(router)
+	loadGuestRoutes(router)
+	loadAuthRoutes(router)
 
 	router.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"message": "Welcome to simple chat!"})
 	})
 
-	router.Run("localhost:" + config.PORT)
+	router.Run("localhost:" + config.Port)
 }

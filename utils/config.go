@@ -1,4 +1,4 @@
-package config
+package utils
 
 import "github.com/spf13/viper"
 
@@ -7,8 +7,15 @@ type Config struct {
 	DBName     string
 	DBUser     string
 	DBPassword string
-	SECRET     string
-	PORT       string
+	Secret     string
+	Port       string
+}
+
+var config *Config
+
+// GetConfig func
+func GetConfig() *Config {
+	return config
 }
 
 // LoadConfigVars -- load confiuration
@@ -17,17 +24,16 @@ func LoadConfigVars() (*Config, error) {
 	viper.SetConfigFile(".env")
 
 	// Read config file
-	err := viper.ReadInConfig()
-	if err != nil {
+	if err := viper.ReadInConfig(); err != nil {
 		return new(Config), err
 	}
 
-	config := &Config{
+	config = &Config{
 		DBName:     viper.GetString("DB_NAME"),
 		DBUser:     viper.GetString("DB_USER"),
 		DBPassword: viper.GetString("DB_PASSWORD"),
-		SECRET:     viper.GetString("SECRET"),
-		PORT:       viper.GetString("PORT"),
+		Secret:     viper.GetString("SECRET"),
+		Port:       viper.GetString("PORT"),
 	}
 
 	return config, nil

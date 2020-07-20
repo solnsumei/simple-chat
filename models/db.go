@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/jinzhu/gorm"
-	"github.com/solnsumei/simple-chat/config"
+	"github.com/solnsumei/simple-chat/utils"
 
 	// using sqlite3 db
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -15,7 +15,7 @@ import (
 var DB *gorm.DB
 
 // ConnectDatabase -- connect to database
-func ConnectDatabase(config *config.Config) error {
+func ConnectDatabase(config *utils.Config) error {
 	db, err := gorm.Open("sqlite3", config.DBName)
 
 	if err != nil {
@@ -27,7 +27,7 @@ func ConnectDatabase(config *config.Config) error {
 }
 
 // RunMigration -- run database migration
-func RunMigration(config *config.Config) error {
+func RunMigration(config *utils.Config) error {
 	err := ConnectDatabase(config)
 	if err != nil {
 		log.Fatal(err)

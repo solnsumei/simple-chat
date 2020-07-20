@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/solnsumei/simple-chat/config"
 	"github.com/solnsumei/simple-chat/models"
+	"github.com/solnsumei/simple-chat/utils"
 )
 
 func runMigrations() {
-	config, err := config.LoadConfigVars()
+	config, err := utils.LoadConfigVars()
 
 	if err != nil {
 		panic("Failed to set config variables")
