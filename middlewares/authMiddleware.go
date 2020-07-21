@@ -34,6 +34,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		authToken := strings.TrimSpace(extractedToken[1])
 		userID, err := utils.CheckAndVerifyToken(authToken)
 
+		// If userID is not in claims return error
 		if err != nil {
 			unauthorizedResponse(c, "Unauthorized access, invalid token.")
 			return

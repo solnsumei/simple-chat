@@ -24,5 +24,7 @@ func loadAuthRoutes(router *gin.Engine) {
 	authRouter := router.Group("/api/v1")
 	authRouter.Use(middlewares.AuthMiddleware())
 
+	authRouter.GET("/user", controllers.GetProfile)
 	authRouter.GET("/users", controllers.FetchAllUsers)
+	authRouter.GET("/users/:userID", controllers.GetUser)
 }

@@ -10,4 +10,5 @@ type Message struct {
 	SenderID   uint
 	Receiver   User `gorm:"foreignkey:ReceiverID"`
 	ReceiverID uint
+	IsRead     bool
 }

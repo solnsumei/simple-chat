@@ -35,6 +35,7 @@ func CheckAndVerifyToken(jwtToken string) (int64, error) {
 		return []byte(config.Secret), nil
 	})
 
+	// Return if there is an error
 	if err != nil {
 		return 0, err
 	}
