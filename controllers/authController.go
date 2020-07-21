@@ -14,12 +14,11 @@ func RegisterUser(c *gin.Context) {
 	var input UserInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		log.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	if err := input.Validate(); err != nil {
-		log.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
@@ -51,11 +50,11 @@ func LoginUser(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		log.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	if err := input.Validate(); err != nil {
-		log.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
