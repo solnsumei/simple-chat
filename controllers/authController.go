@@ -41,7 +41,14 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"data": user})
+	token, err := utils.CreateToken(user.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError,
+			gin.H{"error": "Token could not be created, please try again later."})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"data": user, "token": token})
 }
 
 // LoginUser to app

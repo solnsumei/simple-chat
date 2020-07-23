@@ -3,10 +3,10 @@ package main
 import (
 	"net/http"
 
-	"github.com/solnsumei/simple-chat/middlewares"
-
 	"github.com/gin-gonic/gin"
 	"github.com/solnsumei/simple-chat/controllers"
+	"github.com/solnsumei/simple-chat/middlewares"
+	"github.com/solnsumei/simple-chat/utils"
 )
 
 func loadGuestRoutes(router *gin.Engine) {
@@ -18,6 +18,10 @@ func loadGuestRoutes(router *gin.Engine) {
 	guestRouter.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{"message": "Welcome to simple chat api"})
 	})
+
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{"message": "Welcome to simple chat!"})
+	})
 }
 
 func loadAuthRoutes(router *gin.Engine) {
@@ -27,4 +31,13 @@ func loadAuthRoutes(router *gin.Engine) {
 	authRouter.GET("/user", controllers.GetProfile)
 	authRouter.GET("/users", controllers.FetchAllUsers)
 	authRouter.GET("/users/:userID", controllers.GetUser)
+	authRouter.GET("/users/:userID/chat", controllers.GetUserMessages)
+}
+
+func socketHandler(router *gin.Engine) {
+	socketRouter := router.Group("/")
+	socketRouter.Use(middlewares.AuthMiddleware())
+
+	socketRouter.GET("/socket.io/*any", gin.WrapH(utils.SocketServer))
+	socketRouter.POST("/socket.io/*any", gin.WrapH(utils.SocketServer))
 }

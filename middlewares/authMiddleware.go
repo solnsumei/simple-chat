@@ -19,8 +19,12 @@ func AuthMiddleware() gin.HandlerFunc {
 		// Get Authorization header
 		jwtToken := c.GetHeader("Authorization")
 		if jwtToken == "" {
-			unauthorizedResponse(c, "Unauthorized access, please login.")
-			return
+			queryToken := c.Query("token")
+			if queryToken == "" {
+				unauthorizedResponse(c, "Unauthorized access, please login.")
+				return
+			}
+			jwtToken = "Bearer " + queryToken
 		}
 
 		// Split token string
