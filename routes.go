@@ -31,7 +31,8 @@ func loadAuthRoutes(router *gin.Engine) {
 	authRouter.GET("/user", controllers.GetProfile)
 	authRouter.GET("/users", controllers.FetchAllUsers)
 	authRouter.GET("/users/:userID", controllers.GetUser)
-	authRouter.GET("/users/:userID/chat", controllers.GetUserMessages)
+	authRouter.GET("/users/:userID/chat", controllers.GetChatMessages)
+	authRouter.GET("/chats", controllers.GetOpenChat)
 }
 
 func socketHandler(router *gin.Engine) {
