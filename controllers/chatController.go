@@ -43,6 +43,7 @@ func GetChatMessages(c *gin.Context) {
 		"sender_id = ? AND receiver_id = ?", userID, authID).Or(
 		"sender_id = ? AND receiver_id = ?", authID, userID).First(&chat).Error; err != nil {
 		c.JSON(http.StatusOK, gin.H{"chat": nil, "messages": nil})
+		return
 	}
 
 	var messages []models.Message
