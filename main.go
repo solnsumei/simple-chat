@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -43,7 +44,7 @@ func main() {
 
 	utils.SocketServer.OnEvent("/", "bye", func(s socketio.Conn, msg string) {
 		fmt.Println(msg)
-		s.Close()
+		log.Println(s.Close())
 	})
 
 	utils.SocketServer.OnError("/", func(conn socketio.Conn, err error) {
@@ -66,5 +67,5 @@ func main() {
 
 	server := &http.Server{Addr: "localhost:" + config.Port, Handler: router}
 
-	server.ListenAndServe()
+	log.Fatal(server.ListenAndServe())
 }
