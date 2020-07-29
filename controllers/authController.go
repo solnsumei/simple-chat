@@ -11,7 +11,7 @@ import (
 
 // RegisterUser to database
 func RegisterUser(c *gin.Context) {
-	var input UserInput
+	var input utils.UserInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -53,7 +53,7 @@ func RegisterUser(c *gin.Context) {
 
 // LoginUser to app
 func LoginUser(c *gin.Context) {
-	var input UserInput
+	var input utils.UserInput
 
 	if err := c.ShouldBindJSON(&input); err != nil {
 		log.Println(err.Error())

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	socketio "github.com/googollee/go-socket.io"
 	"log"
@@ -24,13 +25,29 @@ func InitSocket() error {
 // SocketEvents from websocket
 func SocketEvents() {
 	SocketServer.OnConnect("/", func(conn socketio.Conn) error {
-		// conn.SetContext("")
+		conn.SetContext("")
 		fmt.Println("connected:", conn.ID())
+		conn.Join("bbm")
 		return nil
 	})
 
-	SocketServer.OnEvent("/", "message", func(s socketio.Conn, msg string) {
-		fmt.Println(msg)
+	SocketServer.OnEvent("/", "message", func(conn socketio.Conn, msg string) {
+		var input MessageInput
+
+		if err := json.Unmarshal([]byte(msg), &input); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		if err := input.Validate(); err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		event := "message" + input.ReceiverID
+		conn.SetContext("")
+		SocketServer.BroadcastToRoom("/", "bbm", event, msg)
+		// fmt.Println("<<<<<<", input)
 	})
 
 	SocketServer.OnEvent("/", "bye", func(s socketio.Conn, msg string) {

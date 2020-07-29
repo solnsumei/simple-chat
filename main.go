@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	// runMigrations()
+	runMigrations()
 }
 
 func main() {
