@@ -34,7 +34,7 @@ func RunMigration(config *utils.Config) error {
 		return err
 	}
 
-	DB.AutoMigrate(&User{}, &Message{})
+	DB.AutoMigrate(&User{}, &Chat{}, &Message{})
 	fmt.Println("Database tables created successfully")
 
 	return nil

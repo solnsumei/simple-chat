@@ -1,10 +1,13 @@
-package utils
+package controllers
 
 import (
 	"encoding/json"
 	"fmt"
 	socketio "github.com/googollee/go-socket.io"
+	"github.com/solnsumei/simple-chat/models"
+	"github.com/solnsumei/simple-chat/utils"
 	"log"
+	"strconv"
 )
 
 // SocketServer definition
@@ -32,7 +35,7 @@ func SocketEvents() {
 	})
 
 	SocketServer.OnEvent("/", "message", func(conn socketio.Conn, msg string) {
-		var input MessageInput
+		var input utils.MessageInput
 
 		if err := json.Unmarshal([]byte(msg), &input); err != nil {
 			fmt.Println(err)
@@ -42,6 +45,20 @@ func SocketEvents() {
 		if err := input.Validate(); err != nil {
 			fmt.Println(err)
 			return
+		}
+
+		chatID, _ := strconv.Atoi(input.ChatID)
+		receiverID, _ := strconv.Atoi(input.ReceiverID)
+
+		message := models.Message{
+			Body: input.Message,
+			ChatID: uint(chatID),
+			ReceiverID: uint(receiverID),
+			IsRead: false,
+		}
+
+		if err := models.DB.Create(&message).Error; err != nil {
+			fmt.Println(err)
 		}
 
 		event := "message" + input.ReceiverID

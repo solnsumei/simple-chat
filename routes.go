@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/solnsumei/simple-chat/controllers"
 	"github.com/solnsumei/simple-chat/middlewares"
-	"github.com/solnsumei/simple-chat/utils"
 )
 
 func loadGuestRoutes(router *gin.Engine) {
@@ -39,6 +38,6 @@ func socketHandler(router *gin.Engine) {
 	socketRouter := router.Group("/")
 	socketRouter.Use(middlewares.AuthMiddleware())
 
-	socketRouter.GET("/socket.io/*any", gin.WrapH(utils.SocketServer))
-	socketRouter.POST("/socket.io/*any", gin.WrapH(utils.SocketServer))
+	socketRouter.GET("/socket.io/*any", gin.WrapH(controllers.SocketServer))
+	socketRouter.POST("/socket.io/*any", gin.WrapH(controllers.SocketServer))
 }

@@ -23,7 +23,7 @@ func (input UserInput) ValidateLogin() error {
 // Validate user registration
 func (input UserInput) ValidateSignUp() error {
 	return validation.ValidateStruct(&input,
-		validation.Field(&input.Name, validation.Required, is.Alpha),
+		validation.Field(&input.Name, validation.Required, validation.Length(2, 20), is.Alpha),
 		validation.Field(&input.Email, validation.Required, is.EmailFormat),
 		validation.Field(&input.Password, validation.Required, validation.Length(5, 50)),
 	)

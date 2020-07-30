@@ -37,7 +37,7 @@ func RegisterUser(c *gin.Context) {
 	// Check errors in creating user
 	if err := models.DB.Create(&user).Error; err != nil {
 		log.Println(err)
-		c.JSON(http.StatusConflict, gin.H{"error": err.Error()})
+		c.JSON(http.StatusConflict, gin.H{"error": "Email has already been taken"})
 		return
 	}
 
@@ -48,7 +48,7 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"data": user, "token": token})
+	c.JSON(http.StatusCreated, gin.H{"user": user, "token": token})
 }
 
 // LoginUser to app
@@ -62,6 +62,7 @@ func LoginUser(c *gin.Context) {
 	}
 
 	if err := input.ValidateLogin(); err != nil {
+		log.Println(">>>>>", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
@@ -70,13 +71,13 @@ func LoginUser(c *gin.Context) {
 
 	// fetch user from db
 	if err := models.DB.Where("email = ?", input.Email).First(&user).Error; err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Username and/or password is incorrect."})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Username and/or password is incorrect."})
 		return
 	}
 
 	// Compare passwords
 	if !utils.CheckPasswordHash(input.Password, user.Password) {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Username and/or password is incorrect."})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Username and/or password is incorrect."})
 		return
 	}
 

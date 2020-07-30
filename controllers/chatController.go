@@ -53,7 +53,7 @@ func GetChatMessages(c *gin.Context) {
 	}
 
 	var messages []models.Message
-	models.DB.Where("chat_id = ?").Find(&messages)
+	models.DB.Where("chat_id = ?", chat.ID).Find(&messages)
 
 	c.JSON(http.StatusOK, gin.H{"chat": chat, "messages": messages})
 }

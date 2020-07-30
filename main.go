@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/solnsumei/simple-chat/controllers"
 	"log"
 	"net/http"
 
@@ -26,17 +27,17 @@ func main() {
 
 	router := gin.Default()
 
-	if err := utils.InitSocket(); err != nil {
+	if err := controllers.InitSocket(); err != nil {
 		panic(err)
 	}
 
-	utils.SocketEvents()
+	controllers.SocketEvents()
 
 	loadGuestRoutes(router)
 	loadAuthRoutes(router)
 
-	go utils.SocketServer.Serve()
-	defer utils.SocketServer.Close()
+	go controllers.SocketServer.Serve()
+	defer controllers.SocketServer.Close()
 
 	socketHandler(router)
 
