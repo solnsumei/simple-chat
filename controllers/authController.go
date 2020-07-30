@@ -18,7 +18,7 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	if err := input.Validate(); err != nil {
+	if err := input.ValidateSignUp(); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
@@ -32,7 +32,7 @@ func RegisterUser(c *gin.Context) {
 	}
 
 	// Create user
-	user := models.User{Email: input.Email, Password: hashedPassword}
+	user := models.User{Name: input.Name, Email: input.Email, Password: hashedPassword}
 
 	// Check errors in creating user
 	if err := models.DB.Create(&user).Error; err != nil {
@@ -61,7 +61,7 @@ func LoginUser(c *gin.Context) {
 		return
 	}
 
-	if err := input.Validate(); err != nil {
+	if err := input.ValidateLogin(); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}

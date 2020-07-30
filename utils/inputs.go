@@ -7,13 +7,23 @@ import (
 
 // UserInput request
 type UserInput struct {
+	Name string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
-// Validate users
-func (input UserInput) Validate() error {
+// Validate user registration
+func (input UserInput) ValidateLogin() error {
 	return validation.ValidateStruct(&input,
+		validation.Field(&input.Email, validation.Required, is.EmailFormat),
+		validation.Field(&input.Password, validation.Required, validation.Length(5, 50)),
+	)
+}
+
+// Validate user registration
+func (input UserInput) ValidateSignUp() error {
+	return validation.ValidateStruct(&input,
+		validation.Field(&input.Name, validation.Required, is.Alpha),
 		validation.Field(&input.Email, validation.Required, is.EmailFormat),
 		validation.Field(&input.Password, validation.Required, validation.Length(5, 50)),
 	)
