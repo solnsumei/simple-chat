@@ -6,8 +6,8 @@ import "github.com/jinzhu/gorm"
 type Message struct {
 	gorm.Model
 	Body       string
-	Chat       Chat `gorm:"foreignkey:ChatID"`
 	ChatID     uint
+	SenderID uint
 	ReceiverID uint
 	IsRead     bool
 }

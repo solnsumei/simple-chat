@@ -30,7 +30,7 @@ func SocketEvents() {
 	SocketServer.OnConnect("/", func(conn socketio.Conn) error {
 		conn.SetContext("")
 		fmt.Println("connected:", conn.ID())
-		conn.Join("bbm")
+		conn.Join("koko")
 		return nil
 	})
 
@@ -49,10 +49,12 @@ func SocketEvents() {
 
 		chatID, _ := strconv.Atoi(input.ChatID)
 		receiverID, _ := strconv.Atoi(input.ReceiverID)
+		senderID, _ := strconv.Atoi(input.SenderID)
 
 		message := models.Message{
 			Body: input.Message,
 			ChatID: uint(chatID),
+			SenderID: uint(senderID),
 			ReceiverID: uint(receiverID),
 			IsRead: false,
 		}
@@ -62,9 +64,14 @@ func SocketEvents() {
 		}
 
 		event := "message" + input.ReceiverID
+
+		result, _ := json.Marshal(message)
+		resultString := string(result)
+		//fmt.Println(resultString)
+
 		conn.SetContext("")
-		SocketServer.BroadcastToRoom("/", "bbm", event, msg)
-		// fmt.Println("<<<<<<", input)
+		SocketServer.BroadcastToRoom("/", "koko", event, resultString)
+		conn.Emit("message" + input.SenderID, resultString)
 	})
 
 	SocketServer.OnEvent("/", "bye", func(s socketio.Conn, msg string) {

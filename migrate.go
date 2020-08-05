@@ -6,14 +6,12 @@ import (
 )
 
 func runMigrations() {
-	config, err := utils.LoadConfigVars()
-
-	if err != nil {
+	if config, err := utils.LoadConfigVars(); err != nil {
 		panic("Failed to set config variables")
-	}
-
-	err = models.RunMigration(config)
-	if err != nil {
-		panic(err)
+	} else {
+		err = models.RunMigration(config)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
